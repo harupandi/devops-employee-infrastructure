@@ -1,14 +1,14 @@
-output "id" {
-  description = "The resource ID of the Azure Container Registry."
-  value       = azurerm_container_registry.this.id
+output "acr_id" {
+  description = "The resource ID of the ACR."
+  value       = module.acr.id
 }
 
-output "name" {
-  description = "The name of the Azure Container Registry."
-  value       = azurerm_container_registry.this.name
+output "acr_name" {
+  description = "The name of the ACR."
+  value       = module.acr.name
 }
 
-output "login_server" {
-  description = "The login server URL of the Azure Container Registry."
-  value       = azurerm_container_registry.this.login_server
+output "acr_login_server" {
+  description = "The ACR login server."
+  value       = module.acr.login_server
 }
