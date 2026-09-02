@@ -1,0 +1,6 @@
+project_name = "terraform-demo"
+environment = "dev"
+location = "Azure Region for Resource"
+pod_cidr       = "10.244.0.0/16"
+service_cidr   = "10.1.0.0/22"
+dns_service_ip = "10.1.0.53"
