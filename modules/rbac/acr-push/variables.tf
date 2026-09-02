@@ -1,17 +1,5 @@
-variable "project_name" {
-  type = string
-}
-
-variable "container_registry_name" {
-  type = string
-}
-
-variable "location" {
-  type = string
-}
-
 variable "display_name" {
-  description = "Display name of the Microsoft Entra application used by GitHub Actions."
+  description = "Display name of the Microsoft Entra application."
   type        = string
 }
 
@@ -36,11 +24,11 @@ variable "github_repository_id" {
 }
 
 variable "environment" {
-  description = "GitHub Environment trusted by the federated identity."
+  description = "GitHub Environment trusted by this federated identity."
   type        = string
 }
 
-variable "tags" {
-  type    = map(string)
-  default = {}
+variable "acr_id" {
+  description = "Resource ID of the Azure Container Registry that this identity can push to."
+  type        = string
 }
