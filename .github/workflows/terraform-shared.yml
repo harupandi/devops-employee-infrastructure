@@ -26,6 +26,9 @@ env:
   TF_VAR_container_registry_name: ${{ vars.CONTAINER_REGISTRY_NAME }}
   TF_VAR_location: ${{ vars.LOCATION }}
   TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
+  TF_VAR_github_owner: ${{ vars.OWNER }}
+  TF_VAR_github_owner_id: ${{ vars.OWNER_ID }}
+  TF_VAR_environment: ${{ vars.ENVIRONMENT }}
 
 jobs:
   plan:
