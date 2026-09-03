@@ -10,11 +10,6 @@ variable "location" {
   type = string
 }
 
-variable "display_name" {
-  description = "Display name of the Microsoft Entra application used by GitHub Actions."
-  type        = string
-}
-
 variable "github_owner" {
   description = "GitHub repository owner (user or organization)."
   type        = string
@@ -25,22 +20,7 @@ variable "github_owner_id" {
   type        = string
 }
 
-variable "github_repository" {
-  description = "GitHub repository name."
-  type        = string
-}
-
-variable "github_repository_id" {
-  description = "Immutable GitHub repository ID."
-  type        = string
-}
-
 variable "environment" {
   description = "GitHub Environment trusted by the federated identity."
   type        = string
-}
-
-variable "tags" {
-  type    = map(string)
-  default = {}
 }

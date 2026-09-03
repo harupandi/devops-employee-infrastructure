@@ -27,5 +27,5 @@ module "acr-push" {
   github_repository_id = each.value.github_repository_id
   environment          = each.value.environment
   acr_id               = module.acr.id
-
+  
 }
