@@ -1,17 +1,17 @@
 name: Terraform Azure Deploy
 
 on:
-  workflow-dispatch:
-#  pull_request:
-#    branches: [main]
-#    paths:
-#      - 'envs/dev/**'
-#      - 'modules/**'
-#  push:
-#    branches: [main]
-#    paths:
-#      - 'envs/dev/**'
-#      - 'modules/**'
+#  workflow-dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'envs/dev/**'
+      - 'modules/**'
+  push:
+    branches: [main]
+    paths:
+      - 'envs/dev/**'
+      - 'modules/**'
 
 permissions:
   id-token: write

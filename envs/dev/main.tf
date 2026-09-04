@@ -1,3 +1,16 @@
+data "terraform_remote_state" "shared" {
+  backend = "azurerm"
+
+  config = {
+    resource_group_name  = var.tfstate_resource_group_name
+    storage_account_name = var.tfstate_storage_account_name
+    container_name       = var.tfstate_container_name
+    key                  = "shared.tfstate"
+
+    use_azuread_auth = true
+  }
+}
+
 resource "azurerm_resource_group" "this" {
   name     = "${local.name_prefix}-rg"
   location = var.location
@@ -29,4 +42,10 @@ module "aks" {
   sku_tier            = "Standard"
   kubernetes_version  = var.kubernetes_version
   tags                = local.tags
+}
+
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  scope                = data.terraform_remote_state.shared.outputs.acr_id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aks.kubelet_identity
 }
