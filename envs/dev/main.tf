@@ -2,9 +2,9 @@ data "terraform_remote_state" "shared" {
   backend = "azurerm"
 
   config = {
-    resource_group_name  = var.tfstate_resource_group_name
-    storage_account_name = var.tfstate_storage_account_name
-    container_name       = var.tfstate_container_name
+    resource_group_name  = "rg-tfstate"
+    storage_account_name = "sttfstateharupandi"
+    container_name       = "tfstate"
     key                  = "shared.tfstate"
 
     use_azuread_auth = true
