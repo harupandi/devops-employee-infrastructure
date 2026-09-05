@@ -12,11 +12,6 @@ variable "location" {
   default = "South Central US"
 }
 
-variable "tags" {
-  type    = map(string)
-  default = {}
-}
-
 variable "address_space" {
   type = list(string)
 }
@@ -25,4 +20,14 @@ variable "subnets" {
   type = map(object({
     address_prefixes = list(string)
   }))
+}
+
+variable "enable_nsg" {
+  type    = bool
+  default = false
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
 }
