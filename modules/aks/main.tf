@@ -52,6 +52,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     dns_service_ip      = var.dns_service_ip
   }
 
+  web_app_routing {
+    dns_zone_ids = []
+  }
+
   lifecycle {
     ignore_changes = [default_node_pool[0].node_count]
   }

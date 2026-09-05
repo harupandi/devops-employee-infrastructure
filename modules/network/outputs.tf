@@ -12,5 +12,5 @@ output "subnet_ids" {
 }
 
 output "nsg_id" {
-  value = azurerm_network_security_group.this.id
+  value = azurerm_network_security_group.this[0].id
 }
