@@ -49,3 +49,15 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   role_definition_name = "AcrPull"
   principal_id         = module.aks.kubelet_identity
 }
+
+module "argocd" {
+  source = "../../modules/argocd"
+
+  providers = {
+    helm = helm
+  }
+
+  depends_on = [
+    module.aks
+  ]
+}

@@ -29,6 +29,7 @@ env:
   TF_VAR_pod_cidr: ${{ vars.POD_CIDR}}
   TF_VAR_service_cidr: ${{ vars.SERVICE_CIDR}}
   TF_VAR_dns_service_ip: ${{ vars.DNS_SERVICE_IP}}
+  TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
 
 jobs:
   plan:
