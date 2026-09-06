@@ -9,3 +9,13 @@ variable "chart_version" {
   type        = string
   default     = "10.4.0"
 }
+
+variable "environment" {
+  type = string
+  description = "Environment that ArgoCD will watch on k8s repo."
+
+  validation {
+    condition     = contains(["dev", "qa", "prod"], var.environment)
+    error_message = "Environment must be dev, qa, or prod."
+  }
+}
