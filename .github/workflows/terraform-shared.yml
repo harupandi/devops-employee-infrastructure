@@ -1,4 +1,4 @@
-name: Terraform Azure Deploy
+name: Terraform Shared
 
 on:
   pull_request:
