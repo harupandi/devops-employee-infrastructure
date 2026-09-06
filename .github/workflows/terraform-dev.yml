@@ -6,12 +6,10 @@ on:
     branches: [main]
     paths:
       - 'envs/dev/**'
-      - 'modules/**'
   push:
     branches: [main]
     paths:
       - 'envs/dev/**'
-      - 'modules/**'
 
 permissions:
   id-token: write
@@ -60,6 +58,14 @@ jobs:
 
       - name: Terraform validate
         run: terraform validate
+
+      - name: Trivy IaC Scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: CRITICAL,HIGH
+          exit-code: 1
 
       - name: Terraform plan
         run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
