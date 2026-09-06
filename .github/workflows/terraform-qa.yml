@@ -1,16 +1,11 @@
-name: Terraform Dev Deployment
+name: Terraform QA Deployment
 
 on:
-#  workflow-dispatch:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'envs/dev/**'
-      - "modules/**"
+  workflow-dispatch:
   push:
     branches: [main]
     paths:
-      - 'envs/dev/**'
+      - 'envs/qa/**'
       - "modules/**"
 
 permissions:
@@ -35,7 +30,7 @@ jobs:
   plan:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: dev-plan
+    environment: qa-plan
     defaults:
       run:
         working-directory: envs/dev
@@ -148,29 +143,3 @@ jobs:
 
               console.log('Created Terraform plan comment');
             }
-
-  apply:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: dev
-    defaults:
-      run:
-        working-directory: envs/dev
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: azure/login@v2
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-
-      - name: Terraform init
-        run: terraform init -input=false
-
-      - name: Terraform apply
-        run: terraform apply -input=false -auto-approve
