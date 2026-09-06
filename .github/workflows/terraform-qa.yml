@@ -1,12 +1,9 @@
-name: Terraform QA Deployment
+name: Terraform QA
 
 on:
-  workflow-dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'envs/qa/**'
-      - "modules/**"
+  workflow-run:
+    workflows: ["Terraform Dev"]
+    types: [completed]
 
 permissions:
   id-token: write
@@ -28,7 +25,7 @@ env:
 
 jobs:
   plan:
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment: qa-plan
     defaults:
@@ -36,6 +33,8 @@ jobs:
         working-directory: envs/qa
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: azure/login@v2
         with:
@@ -74,3 +73,29 @@ jobs:
           name: terraform-plan-qa
           path: envs/qa/plan.txt
           retention-days: 2
+  
+  apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: qa
+    defaults:
+      run:
+        working-directory: envs/qa
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform apply
+        run: terraform apply -input=false -auto-approve
