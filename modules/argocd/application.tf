@@ -11,7 +11,7 @@ resource "kubernetes_manifest" "devops_employee" {
     }
 
     spec = {
-      project = "default"
+      project = "devops-employee"
 
       source = {
         repoURL        = "https://github.com/harupandi/devops-employee-k8s.git"
