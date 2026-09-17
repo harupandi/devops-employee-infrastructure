@@ -11,17 +11,24 @@ resource "kubernetes_manifest" "devops_employee" {
     }
 
     spec = {
-      project = "default"
+      project = "devops-employee"
 
       source = {
         repoURL        = "https://github.com/harupandi/devops-employee-k8s.git"
         targetRevision = "main"
-        path           = "envs/${var.environment}"
+        path           = "charts/devops-employee"
+
+        helm = {
+          valueFiles = [
+            "values-${var.environment}.yaml"
+          ]
+          ignoreMissingValueFiles = true
+        }
       }
 
       destination = {
         server    = "https://kubernetes.default.svc"
-        namespace = "default"
+        namespace = var.environment
       }
 
       syncPolicy = {

@@ -25,7 +25,7 @@ env:
   ARM_USE_OIDC: true
   TF_VERSION: "1.16.0"
   TF_VAR_location: ${{ vars.LOCATION}}
-  TF_VAR_environment: ${{ vars.ENVIRONMENT}}
+  TF_VAR_environment: dev
   TF_VAR_pod_cidr: ${{ vars.POD_CIDR}}
   TF_VAR_service_cidr: ${{ vars.SERVICE_CIDR}}
   TF_VAR_dns_service_ip: ${{ vars.DNS_SERVICE_IP}}
