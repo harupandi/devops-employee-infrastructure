@@ -29,3 +29,11 @@ variable "service_cidr" {
 variable "dns_service_ip" {
   type = string
 }
+
+variable "k8s_vnet_address" {
+  type = list(string)
+}
+
+variable "k8s_vnet_subnet" {
+  type = list(string)
+}
