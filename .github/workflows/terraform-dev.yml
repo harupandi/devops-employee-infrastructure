@@ -67,7 +67,7 @@ jobs:
 #          exit-code: 1
 
       - name: Terraform plan
-        run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
+        run: terraform plan -input=false -no-color -out=tfplan | tee envs/dev-plan.txt
 
       - name: Upload plan artifact
         if: always()
