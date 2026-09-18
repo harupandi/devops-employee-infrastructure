@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-dev
-          path: envs/dev/plan.txt
+          path: envs/dev-plan.txt
           retention-days: 2
 
       # Comment the Plan output to the PR
@@ -85,7 +85,7 @@ jobs:
           script: |
             const fs = require('fs');
 
-            let plan = fs.readFileSync('envs/dev/plan.txt', 'utf8');
+            let plan = fs.readFileSync('envs/dev-plan.txt', 'utf8');
 
             // GitHub caps comment bodies at 65536 chars — leave headroom for
             // the surrounding markdown/marker/footer text.
