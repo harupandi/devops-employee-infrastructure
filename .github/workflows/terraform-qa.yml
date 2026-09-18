@@ -97,8 +97,8 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Terraform init -backend-config="envs/qa.hcl"
-        run: terraform init -input=false
+      - name: Terraform init
+        run: terraform init -input=false -backend-config="envs/qa.hcl"
 
       - name: Terraform apply
         run: terraform apply -input=false -auto-approve
