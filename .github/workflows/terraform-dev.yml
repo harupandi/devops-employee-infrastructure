@@ -166,7 +166,7 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Terraform init
+      - name: Terraform init -backend-config="envs/dev.hcl"
         run: terraform init -input=false
 
       - name: Terraform apply

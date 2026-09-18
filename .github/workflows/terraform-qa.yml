@@ -1,10 +1,12 @@
-#TODO: MOVE ALL THESE NON SENSITIVE VARS INTO REPO VARIABLES ON GITHUB AND REMOVE THE -PLAN ENVIRONMENTS, NOT NEEDED
-name: Terraform QA
+name: Promote to QA
 
 on:
-  workflow_run:
-    workflows: ["Terraform Dev"]
-    types: [completed]
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: "Commit to promote"
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -25,65 +27,65 @@ env:
   TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
 
 jobs:
-  plan:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-    environment: qa-plan
-    defaults:
-      run:
-        working-directory: envs/qa
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-
-      - uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-
-      - name: Terraform fmt check
-        run: terraform fmt -check -recursive
-
-      - name: Terraform init
-        run: terraform init -input=false
-
-      - name: Terraform validate
-        run: terraform validate
-
-#      - name: Trivy IaC Scan
-#        uses: aquasecurity/trivy-action@v0.36.0
+#  plan:
+#    runs-on: ubuntu-latest
+#    environment: qa
+#    defaults:
+#      run:
+#        working-directory: envs/qa
+#    steps:
+#      - uses: actions/checkout@v4
 #        with:
-#          scan-type: config
-#          scan-ref: .
-#          severity: CRITICAL,HIGH
-#          exit-code: 1
-
-      - name: Terraform plan
-        run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
-
-      - name: Upload plan artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan-qa
-          path: envs/qa/plan.txt
-          retention-days: 2
+#          ref: ${{ github.event.workflow_run.head_sha }}
+#
+#      - uses: azure/login@v2
+#        with:
+#          client-id: ${{ env.ARM_CLIENT_ID }}
+#          tenant-id: ${{ env.ARM_TENANT_ID }}
+#          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+#
+#      - uses: hashicorp/setup-terraform@v3
+#        with:
+#          terraform_version: ${{ env.TF_VERSION }}
+#
+#      - name: Terraform fmt check
+#        run: terraform fmt -check -recursive
+#
+#      - name: Terraform init
+#        run: terraform init -input=false
+#
+#      - name: Terraform validate
+#        run: terraform validate
+#
+##      - name: Trivy IaC Scan
+##        uses: aquasecurity/trivy-action@v0.36.0
+##        with:
+##          scan-type: config
+##          scan-ref: .
+##          severity: CRITICAL,HIGH
+##          exit-code: 1
+#
+#      - name: Terraform plan
+#        run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
+#
+#      - name: Upload plan artifact
+#        if: always()
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: terraform-plan-qa
+#          path: envs/qa/plan.txt
+#          retention-days: 2
   
-  apply:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  promote:
     runs-on: ubuntu-latest
     environment: qa
     defaults:
       run:
-        working-directory: envs/qa
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
 
       - uses: azure/login@v2
         with:
@@ -95,7 +97,7 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Terraform init
+      - name: Terraform init -backend-config="envs/qa.hcl"
         run: terraform init -input=false
 
       - name: Terraform apply
