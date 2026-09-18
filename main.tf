@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "this" {
 }
 
 module "network" {
-  source              = "../../modules/network"
+  source              = "./modules/network"
   name                = "${local.name_prefix}-vnet"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
@@ -29,7 +29,7 @@ module "network" {
 }
 
 module "aks" {
-  source = "../../modules/aks"
+  source = "./modules/aks"
 
   cluster_name        = "${local.name_prefix}-aks"
   uami_name           = "${local.name_prefix}-aks-identity"
@@ -51,7 +51,7 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
 }
 
 module "argocd" {
-  source = "../../modules/argocd"
+  source = "./modules/argocd"
 
   providers = {
     helm = helm
