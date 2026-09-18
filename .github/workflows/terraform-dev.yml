@@ -3,15 +3,12 @@ name: Terraform Dev
 on:
 #  workflow-dispatch:
   pull_request:
-    branches: [main]
-    paths:
-      - 'envs/dev/**'
-      - "modules/**"
+    branches:
+      - main
+
   push:
-    branches: [main]
-    paths:
-      - 'envs/dev/**'
-      - "modules/**"
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -35,10 +32,10 @@ jobs:
   plan:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: dev-plan
+    environment: dev
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
 
@@ -155,7 +152,7 @@ jobs:
     environment: dev
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
 

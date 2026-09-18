@@ -4,12 +4,12 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'envs/shared/**'
+      - 'shared/**'
       - 'modules/**'
   push:
     branches: [main]
     paths:
-      - 'envs/shared/**'
+      - 'shared/**'
       - 'modules/**'
 
 permissions:
