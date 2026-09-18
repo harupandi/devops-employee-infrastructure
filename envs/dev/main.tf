@@ -53,11 +53,8 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
 module "argocd" {
   source = "../../modules/argocd"
 
-  environment = var.environment
-
   providers = {
-    helm       = helm
-    kubernetes = kubernetes
+    helm = helm
   }
 
   depends_on = [
