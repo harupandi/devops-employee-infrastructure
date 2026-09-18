@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "this" {
 }
 
 module "acr" {
-  source = "../../modules/acr"
+  source = "../modules/acr"
 
   container_registry_name = var.container_registry_name
   resource_group_name     = azurerm_resource_group.this.name
@@ -18,7 +18,7 @@ module "acr-push" {
 
   for_each = local.acr_push_identities
 
-  source = "../../modules/rbac/acr-push"
+  source = "../modules/rbac/acr-push"
 
   display_name         = "${var.project_name}-gh-oidc-${each.key}-acr"
   github_owner         = var.github_owner

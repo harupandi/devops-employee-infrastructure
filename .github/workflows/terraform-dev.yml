@@ -3,15 +3,12 @@ name: Terraform Dev
 on:
 #  workflow-dispatch:
   pull_request:
-    branches: [main]
-    paths:
-      - 'envs/dev/**'
-      - "modules/**"
+    branches:
+      - main
+
   push:
-    branches: [main]
-    paths:
-      - 'envs/dev/**'
-      - "modules/**"
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -35,10 +32,10 @@ jobs:
   plan:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: dev-plan
+    environment: dev
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
 
@@ -70,14 +67,14 @@ jobs:
 #          exit-code: 1
 
       - name: Terraform plan
-        run: terraform plan -input=false -no-color -out=tfplan | tee plan.txt
+        run: terraform plan -input=false -no-color -out=tfplan | tee dev-plan.txt
 
       - name: Upload plan artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-dev
-          path: envs/dev/plan.txt
+          path: dev-plan.txt
           retention-days: 2
 
       # Comment the Plan output to the PR
@@ -88,7 +85,7 @@ jobs:
           script: |
             const fs = require('fs');
 
-            let plan = fs.readFileSync('envs/dev/plan.txt', 'utf8');
+            let plan = fs.readFileSync('dev-plan.txt', 'utf8');
 
             // GitHub caps comment bodies at 65536 chars — leave headroom for
             // the surrounding markdown/marker/footer text.
@@ -155,7 +152,7 @@ jobs:
     environment: dev
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
 
