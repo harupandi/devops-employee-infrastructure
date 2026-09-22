@@ -6,22 +6,25 @@ Terraform configuration for the Azure infrastructure running the DevOps Employee
 
 ### Shared
 
-The `envs/shared` environment contains resources shared across environments:
+The `shared` environment contains resources shared across environments:
 
 * Azure Container Registry (ACR)
 * GitHub OIDC / Workload Identity Federation
 * Separate `AcrPush` identities for the frontend and backend repositories
+*This shared environment will soon be moved to its own repository to reduce blast radius*
 
-### Dev
+### Environments
 
-The `envs/dev` environment currently contains:
+GitOps-style, same source code on `main` branch, different configuration values accessed through GitHub's Environments and `envs/*.hcl`.
 
-* Azure Kubernetes Service (AKS)
+Each environment (dev/qa/prod) contains its own:
+
+* Remote state in Azure Storage
+* Azure Kubernetes Service (AKS) cluster
 * Virtual Network and subnets
 * User Assigned Managed Identity (UAMI) for AKS networking
 * ACR pull permissions for the AKS kubelet identity
-
-Staging and Production environments will be added as the project grows.
+* ArgoCD instance running inside the cluster
 
 ## Terraform CI/CD
 
@@ -35,8 +38,10 @@ Terraform changes go through GitHub Actions.
 
 **Merge to `main`**
 
-* Runs `terraform apply`
+* Runs `terraform apply` automatically on the `dev` environment
 * Applies the reviewed Terraform configuration to Azure
+* Once tests and security scans complete, deployment to `qa` can be manually triggered, requiring commit ID
+* Same process for prod - once `qa` completes deployment and passes tests successfully, promotion workflow to `prod` is run with gated approval
 
 GitHub Actions authenticates to Azure using **OIDC** rather than stored credentials. Separate identities are used for Terraform `plan` and `apply`, scoped through GitHub Environments.
 
@@ -51,10 +56,12 @@ PR → Terraform Plan → PR Comment → Review → Merge
 
 * [x] Shared ACR
 * [x] GitHub OIDC / WIF
-* [x] Dev AKS infrastructure
+* [x] Dev environment
 * [x] AKS networking identity
-* [ ] Staging environment
-* [ ] Production environment
-* [ ] Environment promotion workflow
+* [x] QA environment
+* [x] Production environment
+* [x] Environment promotion workflow
+* [ ] Migrate `shared` to its own repository
+* [ ] Add observability
 
 The goal is to keep infrastructure version-controlled, reviewed through pull requests, and deployed consistently across environments.
