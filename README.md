@@ -11,6 +11,7 @@ The `shared` environment contains resources shared across environments:
 * Azure Container Registry (ACR)
 * GitHub OIDC / Workload Identity Federation
 * Separate `AcrPush` identities for the frontend and backend repositories
+
 *This shared environment will soon be moved to its own repository to reduce blast radius*
 
 ### Environments
