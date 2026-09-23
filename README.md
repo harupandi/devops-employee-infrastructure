@@ -1,6 +1,12 @@
 # DevOps Employee — Infrastructure
 
-Terraform configuration for the Azure infrastructure running the DevOps Employee application.
+Project simulating an Employee platform and its CI/CD repositories and pipelines. This is the terraform repository that handles AKS cluster deployments to dev/qa/prod.
+
+Other related repositories:
+
+* [Kubernetes/ArgoCD manifests repository](https://github.com/harupandi/devops-employee-k8s)
+* [Backend repository](https://github.com/harupandi/devops-employee-backend)
+* [Frontend repository](https://github.com/harupandi/devops-employee-frontend)
 
 ## Infrastructure
 
@@ -9,14 +15,13 @@ Terraform configuration for the Azure infrastructure running the DevOps Employee
 The `shared` environment contains resources shared across environments:
 
 * Azure Container Registry (ACR)
-* GitHub OIDC / Workload Identity Federation
 * Separate `AcrPush` identities for the frontend and backend repositories
 
 *This shared environment will soon be moved to its own repository to reduce blast radius*
 
 ### Environments
 
-GitOps-style, same source code on `main` branch, different configuration values accessed through GitHub's Environments and `envs/*.hcl`.
+GitOps-style, `main` branch is the source of truth, environments have different configuration values fetched from GitHub's Environments and `envs/*.hcl`.
 
 Each environment (dev/qa/prod) contains its own:
 
@@ -29,7 +34,7 @@ Each environment (dev/qa/prod) contains its own:
 
 ## Terraform CI/CD
 
-Terraform changes go through GitHub Actions.
+Terraform changes go through GitHub Actions, using OIDC/Workload Identity Federation instead of long-lived service principal secrets.
 
 **Pull Requests**
 
