@@ -2,6 +2,8 @@
 
 Project simulating an Employee platform and its CI/CD repositories and pipelines. This is the terraform repository that handles AKS cluster deployments to dev/qa/prod.
 
+*Note: This is a lab for learning purposes. From a system design standpoint Kubernetes may not be needed (container apps/app services are better alternatives), I simply wanted to get more hands-on experience setting up AKS clusters.*
+
 Other related repositories:
 
 * [Kubernetes/ArgoCD manifests repository](https://github.com/harupandi/devops-employee-k8s)
